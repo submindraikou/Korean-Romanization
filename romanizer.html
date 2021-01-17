@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="utf-8">
+			<title>Romanized Text</title>
+			<script src="https://gitcdn.link/repo/fujaru/aromanize-js/master/aromanize.js"></script>
+		</head>
+
+	<body>
+		<input id="original" style="width: 100%"></input>
+		<div id="romanized">Enter Korean text in the input box above</div>
+		
+		<button id="translate">Translate on Papago</button>
+		<button id="dictionary">Search on Naver Dictionary</button>
+		
+		<script>
+
+				const input_text = document.getElementById('original');
+				const romanized = document.getElementById('romanized');
+				
+				window.onload = () => {
+					input_text.value = '';
+				}
+
+				input_text.addEventListener('change', (e) => {
+					romanized.innerHTML = input_text.value !== '' ? input_text.value.romanize() : 'Enter Korean text in the input box above';
+				});
+
+				document.getElementById('translate').addEventListener('click', () => {
+					window.open('https://papago.naver.com/?sk=ko&tk=en&st=' + encodeURIComponent(input_text.value));
+				});
+				
+				document.getElementById('dictionary').addEventListener('click', () => {
+					window.open('https://en.dict.naver.com/#/search?query=' + encodeURIComponent(input_text.value));
+				});
+
+		</script>
+	</body>
+</html>
