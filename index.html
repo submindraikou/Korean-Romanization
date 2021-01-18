@@ -8,32 +8,70 @@
 
 	<body>
 		<input id="original" style="width: 100%"></input>
-		<div id="romanized">Enter Korean text in the input box above</div>
-		
+		<button id="switch">RR transliteration rules</button>
+		<div id="romanized">annyeonghaseyo!</div>
+
 		<button id="translate">Translate on Papago</button>
 		<button id="dictionary">Search on Naver Dictionary</button>
-		
-		<script>
 
+		<script>
+				// Document elements that are referenced more than once
 				const input_text = document.getElementById('original');
 				const romanized = document.getElementById('romanized');
-				
+				const switch_button = document.getElementById('switch');
+
+				// Whether to use revised transliteration rules
+				var rr_transliteration = true;
+
+				// Set the default transliterated text in case the browser cached something from a previous point.
 				window.onload = () => {
-					input_text.value = '';
+					input_text.value = '안녕하세요!';
 				}
 
+				// Update the text in the output div
+				function update(text, rr) {
+
+					// If there is no text to transliterate just display a sample message
+					if (romanized.innerHTML === '') {
+						romanized.innerHTML = 'Enter Korean text in the input box above';
+						return;
+					}
+
+					// Otherwise transliterate the text
+					if (rr) {
+						romanized.innerHTML = Aromanize.hangulToLatin(text);
+					} else {
+						romanized.innerHTML = Aromanize.romanize(text);
+					}
+				}
+
+				// Update the transliteration whenever the text in the input box is changed
 				input_text.addEventListener('change', (e) => {
-					romanized.innerHTML = input_text.value !== '' ? input_text.value.romanize() : 'Enter Korean text in the input box above';
+					update(input_text.value, rr_transliteration);
 				});
 
+				// A button to let users switch between the default transliteration provided by fujaru/aromanize-js and RR transliteration rules
+				switch_button.addEventListener('click', () => {
+					if (rr_transliteration) {
+						rr_transliteration = false;
+						switch_button.innerHTML = 'Default';
+					} else {
+						rr_transliteration = true;
+						switch_button.innerHTML = 'RR transliteration rules';
+					}
+					// Make sure the transliteration contents reflect the transliteration type
+					update(input_text.value, rr_transliteration);
+				});
+
+				// Search the Korean text on the Papago translator by Naver
 				document.getElementById('translate').addEventListener('click', () => {
 					window.open('https://papago.naver.com/?sk=ko&tk=en&st=' + encodeURIComponent(input_text.value));
 				});
-				
+
+				// Search the Korean text on the Naver KR to EN dictionary
 				document.getElementById('dictionary').addEventListener('click', () => {
 					window.open('https://en.dict.naver.com/#/search?query=' + encodeURIComponent(input_text.value));
 				});
-
 		</script>
 	</body>
 </html>
