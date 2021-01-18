@@ -39,7 +39,7 @@
 
 					// Otherwise transliterate the text
 					if (rr) {
-						romanized.innerHTML = Aromanize.hangulToLatin(text);
+						romanized.innerHTML = Aromanize.hangulToLatin(text, 'rr-translit');
 					} else {
 						romanized.innerHTML = Aromanize.romanize(text);
 					}
